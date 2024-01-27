@@ -62,7 +62,7 @@ public class NewtonsoftVsTextDeserialization
         _ = System.Text.Json.JsonSerializer.Deserialize<List<User>>(serializedTestUsers);
 
     [Benchmark]
-    public void NewtonsoftDeserializeMuchData()
+    public void NewtonsoftDeserializeIndividualData()
     {
         foreach (var user in serializedTestUsersList)
         {
@@ -71,7 +71,7 @@ public class NewtonsoftVsTextDeserialization
     }
 
     [Benchmark]
-    public void MicrosoftDeserializeMuchData()
+    public void MicrosoftDeserializeIndividualData()
     {
         foreach (var user in serializedTestUsersList)
         {

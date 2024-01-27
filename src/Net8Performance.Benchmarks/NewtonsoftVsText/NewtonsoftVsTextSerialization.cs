@@ -81,7 +81,7 @@ public class NewtonsoftVsTextSerialization
     }
 
     [Benchmark]
-    public void NewtonsoftSerializeMuchData()
+    public void NewtonsoftSerializeIndividualData()
     {
         foreach (var user in testUsers)
         {
@@ -90,7 +90,7 @@ public class NewtonsoftVsTextSerialization
     }
 
     [Benchmark]
-    public void MicrosoftSerializeMuchData()
+    public void MicrosoftSerializeIndividualData()
     {
         foreach (var user in testUsers)
         {
