@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C25E7DFC-0C98-48BD-BD86-AB22B28FAA23}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetBenchmarks.JSON", "Net8Performance.Benchmarks\DotnetBenchmarks.JSON.csproj", "{9CA7846E-69CB-4A69-B606-254BF77F6E1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetBenchmarks.Json", "DotnetBenchmarks.Json\DotnetBenchmarks.Json.csproj", "{9449B04C-DEDE-44AC-9C64-23AED025DED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9CA7846E-69CB-4A69-B606-254BF77F6E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CA7846E-69CB-4A69-B606-254BF77F6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CA7846E-69CB-4A69-B606-254BF77F6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CA7846E-69CB-4A69-B606-254BF77F6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9449B04C-DEDE-44AC-9C64-23AED025DED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9449B04C-DEDE-44AC-9C64-23AED025DED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9449B04C-DEDE-44AC-9C64-23AED025DED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9449B04C-DEDE-44AC-9C64-23AED025DED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9CA7846E-69CB-4A69-B606-254BF77F6E1E} = {C25E7DFC-0C98-48BD-BD86-AB22B28FAA23}
+		{9449B04C-DEDE-44AC-9C64-23AED025DED0} = {C25E7DFC-0C98-48BD-BD86-AB22B28FAA23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D8431CB-1DD6-45DA-9C03-B1EFAB5ACB80}
