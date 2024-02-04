@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Jetbrains
-src/.idea/*
+.idea/*
