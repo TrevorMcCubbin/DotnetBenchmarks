@@ -19,10 +19,12 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
-public class NewtonsoftVsTextDeserialization(string serializedTestUsers)
+public class NewtonsoftVsTextDeserialization()
 {
     [Params(10000)]
     public int Count { get; set; }
+
+    string serializedTestUsers = string.Empty;
 
     private readonly List<string> _serializedTestUsersList =  [ ];
 
