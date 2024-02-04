@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Bogus;
 using DotnetBenchmarks.Json.Model;
@@ -15,11 +16,12 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
     warmupCount: 3,
     iterationCount: 5,
     invocationCount: -1,
-    id: "NET 8.0",
-    baseline: true
+    id: "NET 8.0"
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
+[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+[CategoriesColumn]
 public class NewtonsoftVsTextSerialization
 {
     [Params(10000)]
@@ -45,18 +47,18 @@ public class NewtonsoftVsTextSerialization
         _testUsers = faker.Generate(Count);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Big Data"), Benchmark(Baseline = true)]
     public void NewtonsoftSerializeBigData() =>
         _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers);
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Big Data"), Benchmark]
     public void MicrosoftSerializeBigData() =>
         _ = System.Text.Json.JsonSerializer.Serialize(_testUsers);
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Big Data With Settings"), Benchmark(Baseline = true)]
     public void NewtonsoftSerializeBigDataWithSettings()
     {
-        var settings = new Newtonsoft.Json.JsonSerializerSettings()
+        var settings = new Newtonsoft.Json.JsonSerializerSettings
         {
             Formatting = Newtonsoft.Json.Formatting.Indented,
             ContractResolver = new DefaultContractResolver
@@ -68,7 +70,7 @@ public class NewtonsoftVsTextSerialization
         _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers, settings);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Big Data With Settings"), Benchmark]
     public void MicrosoftSerializeBigDataWithSettings()
     {
         var settings = new JsonSerializerOptions
@@ -80,7 +82,7 @@ public class NewtonsoftVsTextSerialization
         _ = System.Text.Json.JsonSerializer.Serialize(_testUsers, settings);
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark(Baseline = true)]
     public void NewtonsoftSerializeIndividualData()
     {
         foreach (var user in _testUsers)
@@ -89,7 +91,7 @@ public class NewtonsoftVsTextSerialization
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark]
     public void MicrosoftSerializeIndividualData()
     {
         foreach (var user in _testUsers)

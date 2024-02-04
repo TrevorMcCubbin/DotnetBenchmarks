@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Bogus;
 using DotnetBenchmarks.Json.Model;
@@ -14,17 +15,18 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
     warmupCount: 3,
     iterationCount: 5,
     invocationCount: -1,
-    id: "NET 8.0",
-    baseline: true
+    id: "NET 8.0"
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
-public class NewtonsoftVsTextDeserialization()
+[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+[CategoriesColumn]
+public class NewtonsoftVsTextDeserialization
 {
     [Params(10000)]
     public int Count { get; set; }
 
-    string serializedTestUsers = string.Empty;
+    private string _serializedTestUsers = string.Empty;
 
     private readonly List<string> _serializedTestUsersList =  [ ];
 
@@ -45,7 +47,7 @@ public class NewtonsoftVsTextDeserialization()
 
         var testUsers = faker.Generate(Count);
 
-        serializedTestUsers = JsonSerializer.Serialize(testUsers);
+        _serializedTestUsers = JsonSerializer.Serialize(testUsers);
 
         foreach (var user in testUsers.Select(u => JsonSerializer.Serialize(u)))
         {
@@ -53,15 +55,15 @@ public class NewtonsoftVsTextDeserialization()
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Deserialize Big Data"), Benchmark(Baseline = true)]
     public void NewtonsoftDeserializeBigData() =>
-        _ = Newtonsoft.Json.JsonConvert.DeserializeObject<List<User>>(serializedTestUsers);
+        _ = Newtonsoft.Json.JsonConvert.DeserializeObject<List<User>>(_serializedTestUsers);
 
-    [Benchmark]
+    [BenchmarkCategory("Deserialize Big Data"), Benchmark]
     public void MicrosoftDeserializeBigData() =>
-        _ = System.Text.Json.JsonSerializer.Deserialize<List<User>>(serializedTestUsers);
+        _ = System.Text.Json.JsonSerializer.Deserialize<List<User>>(_serializedTestUsers);
 
-    [Benchmark]
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Baseline = true)]
     public void NewtonsoftDeserializeIndividualData()
     {
         foreach (var user in _serializedTestUsersList)
@@ -70,7 +72,7 @@ public class NewtonsoftVsTextDeserialization()
         }
     }
 
-    [Benchmark]
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
     public void MicrosoftDeserializeIndividualData()
     {
         foreach (var user in _serializedTestUsersList)
