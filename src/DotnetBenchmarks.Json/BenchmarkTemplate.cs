@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Jobs;
 
-namespace NetPerformance.Benchmarks;
+namespace DotnetBenchmarks.Json;
 
 [RPlotExporter]
 [SimpleJob(

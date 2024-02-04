@@ -1,4 +1,4 @@
-﻿namespace NetPerformance.Benchmarks.Model;
+﻿namespace DotnetBenchmarks.Json.Model;
 
 internal record User(
     Guid UserId,

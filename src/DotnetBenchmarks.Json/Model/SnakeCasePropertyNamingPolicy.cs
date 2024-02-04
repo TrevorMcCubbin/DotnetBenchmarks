@@ -1,28 +1,20 @@
 ﻿using System.Text.Json;
 
-namespace NetPerformance.Benchmarks.Model;
+namespace DotnetBenchmarks.Json.Model;
 
 public class SnakeCasePropertyNamingPolicy : JsonNamingPolicy
 {
     public override string ConvertName(string name)
     {
-        int upperCaseLength = 0;
+        var upperCaseLength = name.Count(t => t is >= 'A' and <= 'Z' && t != name[0]);
 
-        for (int i = 0; i < name.Length; i++)
-        {
-            if (name[i] >= 'A' && name[i] <= 'Z' && name[i] != name[0])
-            {
-                upperCaseLength++;
-            }
-        }
-
-        int bufferSize = name.Length + upperCaseLength;
+        var bufferSize = name.Length + upperCaseLength;
 
         Span<char> buffer = new char[bufferSize];
 
-        int bufferPosition = 0;
+        var bufferPosition = 0;
 
-        int namePosition = 0;
+        var namePosition = 0;
 
         while (bufferPosition < buffer.Length)
         {

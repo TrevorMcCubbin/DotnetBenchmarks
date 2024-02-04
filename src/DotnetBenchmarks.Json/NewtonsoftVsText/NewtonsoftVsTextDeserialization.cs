@@ -3,9 +3,9 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Jobs;
 using Bogus;
-using NetPerformance.Benchmarks.Model;
+using DotnetBenchmarks.Json.Model;
 
-namespace NetPerformance.Benchmarks.NewtonsoftVsText;
+namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 
 [RPlotExporter]
 [SimpleJob(
@@ -19,14 +19,12 @@ namespace NetPerformance.Benchmarks.NewtonsoftVsText;
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
-public class NewtonsoftVsTextDeserialization
+public class NewtonsoftVsTextDeserialization(string serializedTestUsers)
 {
     [Params(10000)]
     public int Count { get; set; }
 
-    private string serializedTestUsers;
-
-    private readonly List<string> serializedTestUsersList =  [ ];
+    private readonly List<string> _serializedTestUsersList =  [ ];
 
     [GlobalSetup]
     public void GlobalSetup()
@@ -49,7 +47,7 @@ public class NewtonsoftVsTextDeserialization
 
         foreach (var user in testUsers.Select(u => JsonSerializer.Serialize(u)))
         {
-            serializedTestUsersList.Add(user);
+            _serializedTestUsersList.Add(user);
         }
     }
 
@@ -64,7 +62,7 @@ public class NewtonsoftVsTextDeserialization
     [Benchmark]
     public void NewtonsoftDeserializeIndividualData()
     {
-        foreach (var user in serializedTestUsersList)
+        foreach (var user in _serializedTestUsersList)
         {
             _ = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(user);
         }
@@ -73,7 +71,7 @@ public class NewtonsoftVsTextDeserialization
     [Benchmark]
     public void MicrosoftDeserializeIndividualData()
     {
-        foreach (var user in serializedTestUsersList)
+        foreach (var user in _serializedTestUsersList)
         {
             _ = System.Text.Json.JsonSerializer.Deserialize<User>(user);
         }

@@ -3,10 +3,10 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Jobs;
 using Bogus;
-using NetPerformance.Benchmarks.Model;
+using DotnetBenchmarks.Json.Model;
 using Newtonsoft.Json.Serialization;
 
-namespace NetPerformance.Benchmarks.NewtonsoftVsText;
+namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 
 [RPlotExporter]
 [SimpleJob(
@@ -25,7 +25,7 @@ public class NewtonsoftVsTextSerialization
     [Params(10000)]
     public int Count { get; set; }
 
-    private List<User> testUsers =  [ ];
+    private List<User> _testUsers =  [ ];
 
     [GlobalSetup]
     public void GlobalSetup()
@@ -42,16 +42,16 @@ public class NewtonsoftVsTextSerialization
                 )
         );
 
-        testUsers = faker.Generate(Count);
+        _testUsers = faker.Generate(Count);
     }
 
     [Benchmark]
     public void NewtonsoftSerializeBigData() =>
-        _ = Newtonsoft.Json.JsonConvert.SerializeObject(testUsers);
+        _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers);
 
     [Benchmark]
     public void MicrosoftSerializeBigData() =>
-        _ = System.Text.Json.JsonSerializer.Serialize(testUsers);
+        _ = System.Text.Json.JsonSerializer.Serialize(_testUsers);
 
     [Benchmark]
     public void NewtonsoftSerializeBigDataWithSettings()
@@ -65,25 +65,25 @@ public class NewtonsoftVsTextSerialization
             }
         };
 
-        _ = Newtonsoft.Json.JsonConvert.SerializeObject(testUsers, settings);
+        _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers, settings);
     }
 
     [Benchmark]
     public void MicrosoftSerializeBigDataWithSettings()
     {
-        var settings = new JsonSerializerOptions()
+        var settings = new JsonSerializerOptions
         {
             WriteIndented = true,
             PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy()
         };
 
-        _ = System.Text.Json.JsonSerializer.Serialize(testUsers, settings);
+        _ = System.Text.Json.JsonSerializer.Serialize(_testUsers, settings);
     }
 
     [Benchmark]
     public void NewtonsoftSerializeIndividualData()
     {
-        foreach (var user in testUsers)
+        foreach (var user in _testUsers)
         {
             _ = Newtonsoft.Json.JsonConvert.SerializeObject(user);
         }
@@ -92,7 +92,7 @@ public class NewtonsoftVsTextSerialization
     [Benchmark]
     public void MicrosoftSerializeIndividualData()
     {
-        foreach (var user in testUsers)
+        foreach (var user in _testUsers)
         {
             _ = System.Text.Json.JsonSerializer.Serialize(user);
         }
