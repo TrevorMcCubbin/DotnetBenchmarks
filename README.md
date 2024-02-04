@@ -18,8 +18,8 @@ To get started with .NET benchmarks, follow these steps:
 1. **Clone the Repository:**
 
 ```bash
-git clone https://github.com/your-username/dotnet-benchmarks.git
-cd dotnet-benchmarks
+git clone https://github.com/TrevorMcCubbin/DotnetBenchmarks.git
+cd DotnetBenchmarks
 ```
 
 Install .NET 8 SDK:
