@@ -21,7 +21,7 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [CategoriesColumn]
-public class NewtonsoftVsTextDeserialization
+public class Deserialization
 {
     [Params(10000)]
     public int Count { get; set; }
