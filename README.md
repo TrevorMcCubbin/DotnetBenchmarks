@@ -7,6 +7,7 @@ Welcome to my .NET Benchmarks repository! This repository is dedicated to benchm
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+  - [Running Benchmarks](#running-benchmarks)
 - [Benchmarking Guidelines](#benchmarking-guidelines)
 - [Contributing](#contributing)
 - [License](#license)
@@ -25,11 +26,14 @@ cd DotnetBenchmarks
 Install .NET 8 SDK:
 Make sure you have the .NET Core SDK installed.
 
-Run Benchmarks:
-Execute the following command to run the benchmarks:
-
+### Running Benchmarks
+To run Json Benchmarks in .Net 8:
 ```bash
 dotnet run -c release --project .\src\DotnetBenchmarks.Json\DotnetBenchmarks.Json.csproj
+```
+To run a comparison of various benchmarks between .Net 8 and .Net Framework 4.8:
+```bash
+dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj
 ```
 
 Explore Results:
