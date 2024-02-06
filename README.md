@@ -27,13 +27,17 @@ Install .NET 8 SDK:
 Make sure you have the .NET Core SDK installed.
 
 ### Running Benchmarks
+
 To run Json Benchmarks in .Net 8:
+
 ```bash
 dotnet run -c release --project .\src\DotnetBenchmarks.Json\DotnetBenchmarks.Json.csproj
 ```
+
 To run a comparison of various benchmarks between .Net 8 and .Net Framework 4.8:
+
 ```bash
-dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj
+dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj --framework net8.0
 ```
 
 Explore Results:
