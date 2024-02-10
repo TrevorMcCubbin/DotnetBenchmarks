@@ -5,19 +5,20 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Order;
 using Bogus;
 using DotnetBenchmarks.FrameworkFaceOff.Model;
 
 namespace DotnetBenchmarks.FrameworkFaceOff.Json
 {
-    [RPlotExporter]
     [SimpleJob(
         RuntimeMoniker.Net48,
         launchCount: 1,
         warmupCount: 3,
         iterationCount: 5,
         invocationCount: -1,
-        id: "NET Framework 4.8"
+        id: "NET Framework 4.8",
+        baseline: true
     )]
     [SimpleJob(
         RuntimeMoniker.Net80,
@@ -31,6 +32,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
     [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
+    [Orderer(SummaryOrderPolicy.SlowestToFastest, MethodOrderPolicy.Declared)]
     public class JsonSerialization
     {
         [Params(10000)]
@@ -57,14 +59,20 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             _testUsers = faker.Generate(Count);
         }
 
-        [BenchmarkCategory("Serialize Big Data"), Benchmark(Baseline = true)]
+        [
+            BenchmarkCategory("Serialize Big Data"),
+            Benchmark(Description = "Newtonsoft", Baseline = true)
+        ]
         public void NewtonsoftSerializeBigData() =>
             _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers);
 
-        [BenchmarkCategory("Serialize Big Data"), Benchmark]
+        [BenchmarkCategory("Serialize Big Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftSerializeBigData() => _ = JsonSerializer.Serialize(_testUsers);
 
-        [BenchmarkCategory("Serialize Individual Data"), Benchmark(Baseline = true)]
+        [
+            BenchmarkCategory("Serialize Individual Data"),
+            Benchmark(Description = "Newtonsoft", Baseline = true)
+        ]
         public void NewtonsoftSerializeIndividualData()
         {
             foreach (var user in _testUsers)
@@ -73,7 +81,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             }
         }
 
-        [BenchmarkCategory("Serialize Individual Data"), Benchmark]
+        [BenchmarkCategory("Serialize Individual Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftSerializeIndividualData()
         {
             foreach (var user in _testUsers)
