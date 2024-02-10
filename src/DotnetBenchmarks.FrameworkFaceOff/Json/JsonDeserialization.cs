@@ -5,6 +5,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Order;
 using Bogus;
 using DotnetBenchmarks.FrameworkFaceOff.Model;
 using Newtonsoft.Json;
@@ -12,14 +13,14 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DotnetBenchmarks.FrameworkFaceOff.Json
 {
-    [RPlotExporter]
     [SimpleJob(
         RuntimeMoniker.Net48,
         launchCount: 1,
         warmupCount: 3,
         iterationCount: 5,
         invocationCount: -1,
-        id: "NET Framework 4.8"
+        id: "NET Framework 4.8",
+        baseline: true
     )]
     [SimpleJob(
         RuntimeMoniker.Net80,
@@ -33,6 +34,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
     [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
+    [Orderer(SummaryOrderPolicy.SlowestToFastest, MethodOrderPolicy.Declared)]
     public class JsonDeserialization
     {
         [Params(10000)]
@@ -68,15 +70,21 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             }
         }
 
-        [BenchmarkCategory("Deserialize Big Data"), Benchmark(Baseline = true)]
+        [
+            BenchmarkCategory("Deserialize Big Data"),
+            Benchmark(Description = "Newtonsoft", Baseline = true)
+        ]
         public void NewtonsoftDeserializeBigData() =>
             _ = JsonConvert.DeserializeObject<List<User>>(_serializedTestUsers);
 
-        [BenchmarkCategory("Deserialize Big Data"), Benchmark]
+        [BenchmarkCategory("Deserialize Big Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftDeserializeBigData() =>
             _ = JsonSerializer.Deserialize<List<User>>(_serializedTestUsers);
 
-        [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Baseline = true)]
+        [
+            BenchmarkCategory("Deserialize Individual Data"),
+            Benchmark(Description = "Newtonsoft", Baseline = true)
+        ]
         public void NewtonsoftDeserializeIndividualData()
         {
             foreach (var user in _serializedTestUsersList)
@@ -85,7 +93,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             }
         }
 
-        [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
+        [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftDeserializeIndividualData()
         {
             foreach (var user in _serializedTestUsersList)
