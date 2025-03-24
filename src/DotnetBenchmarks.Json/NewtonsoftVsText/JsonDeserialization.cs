@@ -1,10 +1,11 @@
-﻿using System.Text.Json;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Bogus;
 using DotnetBenchmarks.Json.Model;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 
@@ -23,12 +24,12 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 [CategoriesColumn]
 public class JsonDeserialization
 {
+    private readonly List<string> serializedTestUsersList =  [ ];
+
+    private string serializedTestUsers = string.Empty;
+
     [Params(10000)]
     public int Count { get; set; }
-
-    private string _serializedTestUsers = string.Empty;
-
-    private readonly List<string> _serializedTestUsersList =  [ ];
 
     [GlobalSetup]
     public void GlobalSetup()
@@ -47,37 +48,37 @@ public class JsonDeserialization
 
         var testUsers = faker.Generate(Count);
 
-        _serializedTestUsers = JsonSerializer.Serialize(testUsers);
+        serializedTestUsers = JsonSerializer.Serialize(testUsers);
 
         foreach (var user in testUsers.Select(u => JsonSerializer.Serialize(u)))
         {
-            _serializedTestUsersList.Add(user);
+            serializedTestUsersList.Add(user);
         }
     }
 
-    [BenchmarkCategory("Deserialize Big Data"), Benchmark(Baseline = true)]
-    public void NewtonsoftDeserializeBigData() =>
-        _ = Newtonsoft.Json.JsonConvert.DeserializeObject<List<User>>(_serializedTestUsers);
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark]
+    public void NewtonsoftDeserializeLargeDataset() =>
+        _ = JsonConvert.DeserializeObject<List<User>>(serializedTestUsers);
 
-    [BenchmarkCategory("Deserialize Big Data"), Benchmark]
-    public void MicrosoftDeserializeBigData() =>
-        _ = System.Text.Json.JsonSerializer.Deserialize<List<User>>(_serializedTestUsers);
-
-    [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Baseline = true)]
-    public void NewtonsoftDeserializeIndividualData()
-    {
-        foreach (var user in _serializedTestUsersList)
-        {
-            _ = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(user);
-        }
-    }
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark(Baseline = true)]
+    public void MicrosoftDeserializeLargeDataset() =>
+        _ = JsonSerializer.Deserialize<List<User>>(serializedTestUsers);
 
     [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
+    public void NewtonsoftDeserializeIndividualData()
+    {
+        foreach (var user in serializedTestUsersList)
+        {
+            _ = JsonConvert.DeserializeObject<User>(user);
+        }
+    }
+
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Baseline = true)]
     public void MicrosoftDeserializeIndividualData()
     {
-        foreach (var user in _serializedTestUsersList)
+        foreach (var user in serializedTestUsersList)
         {
-            _ = System.Text.Json.JsonSerializer.Deserialize<User>(user);
+            _ = JsonSerializer.Deserialize<User>(user);
         }
     }
 }
