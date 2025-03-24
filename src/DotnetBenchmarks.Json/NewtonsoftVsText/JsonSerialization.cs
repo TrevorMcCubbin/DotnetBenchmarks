@@ -11,12 +11,12 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 
 [RPlotExporter]
 [SimpleJob(
-    RuntimeMoniker.Net80,
+    RuntimeMoniker.Net90,
     launchCount: 1,
     warmupCount: 3,
     iterationCount: 5,
     invocationCount: -1,
-    id: "NET 8.0"
+    id: "NET 9.0"
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
