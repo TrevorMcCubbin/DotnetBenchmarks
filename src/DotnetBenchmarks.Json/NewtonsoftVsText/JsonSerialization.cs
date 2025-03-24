@@ -5,7 +5,9 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using Bogus;
 using DotnetBenchmarks.Json.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 
@@ -24,10 +26,23 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 [CategoriesColumn]
 public class JsonSerialization
 {
+    private readonly JsonSerializerOptions jsonSerializerOptions =
+        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+
+    private readonly JsonSerializerSettings jsonSerializerSettings =
+        new()
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
+        };
+
+    private List<User> testUsers =  [ ];
+
     [Params(10000)]
     public int Count { get; set; }
-
-    private List<User> _testUsers =  [ ];
 
     [GlobalSetup]
     public void GlobalSetup()
@@ -44,59 +59,42 @@ public class JsonSerialization
                 )
         );
 
-        _testUsers = faker.Generate(Count);
+        testUsers = faker.Generate(Count);
     }
 
-    [BenchmarkCategory("Serialize Big Data"), Benchmark(Baseline = true)]
-    public void NewtonsoftSerializeBigData() =>
-        _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers);
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
+    public void NewtonsoftSerializeLargeDataset() => _ = JsonConvert.SerializeObject(testUsers);
 
-    [BenchmarkCategory("Serialize Big Data"), Benchmark]
-    public void MicrosoftSerializeBigData() =>
-        _ = System.Text.Json.JsonSerializer.Serialize(_testUsers);
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark(Baseline = true)]
+    public void MicrosoftSerializeLargeDataset() => _ = JsonSerializer.Serialize(testUsers);
 
-    [BenchmarkCategory("Serialize Big Data With Settings"), Benchmark(Baseline = true)]
-    public void NewtonsoftSerializeBigDataWithSettings()
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark]
+    public void NewtonsoftSerializeLargeDatasetWithSettings()
     {
-        var settings = new Newtonsoft.Json.JsonSerializerSettings
-        {
-            Formatting = Newtonsoft.Json.Formatting.Indented,
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-        };
-
-        _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers, settings);
+        _ = JsonConvert.SerializeObject(testUsers, jsonSerializerSettings);
     }
 
-    [BenchmarkCategory("Serialize Big Data With Settings"), Benchmark]
-    public void MicrosoftSerializeBigDataWithSettings()
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark(Baseline = true)]
+    public void MicrosoftSerializeLargeDatasetWithSettings()
     {
-        var settings = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy()
-        };
-
-        _ = System.Text.Json.JsonSerializer.Serialize(_testUsers, settings);
-    }
-
-    [BenchmarkCategory("Serialize Individual Data"), Benchmark(Baseline = true)]
-    public void NewtonsoftSerializeIndividualData()
-    {
-        foreach (var user in _testUsers)
-        {
-            _ = Newtonsoft.Json.JsonConvert.SerializeObject(user);
-        }
+        _ = JsonSerializer.Serialize(testUsers, jsonSerializerOptions);
     }
 
     [BenchmarkCategory("Serialize Individual Data"), Benchmark]
+    public void NewtonsoftSerializeIndividualData()
+    {
+        foreach (var user in testUsers)
+        {
+            _ = JsonConvert.SerializeObject(user);
+        }
+    }
+
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark(Baseline = true)]
     public void MicrosoftSerializeIndividualData()
     {
-        foreach (var user in _testUsers)
+        foreach (var user in testUsers)
         {
-            _ = System.Text.Json.JsonSerializer.Serialize(user);
+            _ = JsonSerializer.Serialize(user);
         }
     }
 }
