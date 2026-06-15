@@ -35,7 +35,7 @@ public class JsonOptionCreation
         };
 
     private readonly JsonSerializerOptions _microsoftSerializerOptions =
-        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+        new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
     private List<User> _users =  [ ];
 
@@ -93,7 +93,7 @@ public class JsonOptionCreation
         var settings = new JsonSerializerOptions
         {
             WriteIndented = true,
-            PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy()
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         };
 
         System.Text.Json.JsonSerializer.Serialize(_users, settings);

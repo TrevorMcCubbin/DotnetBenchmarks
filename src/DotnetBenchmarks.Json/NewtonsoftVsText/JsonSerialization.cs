@@ -27,7 +27,7 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 public class JsonSerialization
 {
     private readonly JsonSerializerOptions jsonSerializerOptions =
-        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+        new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
     private readonly JsonSerializerSettings jsonSerializerSettings =
         new()
