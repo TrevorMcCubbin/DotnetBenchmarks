@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Text;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
@@ -25,8 +26,10 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 public class JsonDeserialization
 {
     private readonly List<string> serializedTestUsersList =  [ ];
+    private readonly List<byte[]> serializedTestUsersUtf8List =  [ ];
 
     private string serializedTestUsers = string.Empty;
+    private byte[] serializedTestUsersUtf8 = null!;
 
     [Params(10000)]
     public int Count { get; set; }
@@ -49,23 +52,26 @@ public class JsonDeserialization
         var testUsers = faker.Generate(Count);
 
         serializedTestUsers = JsonSerializer.Serialize(testUsers);
+        serializedTestUsersUtf8 = Encoding.UTF8.GetBytes(serializedTestUsers);
 
         foreach (var user in testUsers.Select(u => JsonSerializer.Serialize(u)))
         {
             serializedTestUsersList.Add(user);
         }
+        foreach (var userUtf8 in testUsers.Select(u => JsonSerializer.SerializeToUtf8Bytes(u)))
+        {
+            serializedTestUsersUtf8List.Add(userUtf8);
+        }
     }
 
+    #region Newtonsoft.Json
+
     [BenchmarkCategory("Deserialize Large Dataset"), Benchmark]
-    public void NewtonsoftDeserializeLargeDataset() =>
+    public void Newtonsoft_DeserializeLargeDataset() =>
         _ = JsonConvert.DeserializeObject<List<User>>(serializedTestUsers);
 
-    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark(Baseline = true)]
-    public void MicrosoftDeserializeLargeDataset() =>
-        _ = JsonSerializer.Deserialize<List<User>>(serializedTestUsers);
-
     [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
-    public void NewtonsoftDeserializeIndividualData()
+    public void Newtonsoft_DeserializeIndividualData()
     {
         foreach (var user in serializedTestUsersList)
         {
@@ -73,12 +79,71 @@ public class JsonDeserialization
         }
     }
 
+    #endregion
+    #region System.Text.Json (with Reflection)
+
+    // strings
+
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark(Baseline = true)]
+    public void Microsoft_DeserializeLargeDataset() =>
+        _ = JsonSerializer.Deserialize<List<User>>(serializedTestUsers);
+
     [BenchmarkCategory("Deserialize Individual Data"), Benchmark(Baseline = true)]
-    public void MicrosoftDeserializeIndividualData()
+    public void Microsoft_DeserializeIndividualData()
     {
         foreach (var user in serializedTestUsersList)
         {
             _ = JsonSerializer.Deserialize<User>(user);
         }
     }
+
+    // UTF-8 bytes
+
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark]
+    public void Microsoft_Utf8_DeserializeLargeDataset() =>
+        _ = JsonSerializer.Deserialize<List<User>>(serializedTestUsersUtf8);
+
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
+    public void Microsoft_Utf8_DeserializeIndividualData()
+    {
+        foreach (var userUtf8 in serializedTestUsersUtf8List)
+        {
+            _ = JsonSerializer.Deserialize<User>(userUtf8);
+        }
+    }
+
+    #endregion
+    #region System.Text.Json (with Source Generation)
+
+    // strings
+
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark]
+    public void Microsoft_SourceGen_DeserializeLargeDataset() =>
+        _ = JsonSerializer.Deserialize(serializedTestUsers, UserSerializerContext.Default.ListUser);
+
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
+    public void Microsoft_SourceGen_DeserializeIndividualData()
+    {
+        foreach (var user in serializedTestUsersList)
+        {
+            _ = JsonSerializer.Deserialize(user, UserSerializerContext.Default.User);
+        }
+    }
+
+    // UTF-8 bytes
+
+    [BenchmarkCategory("Deserialize Large Dataset"), Benchmark]
+    public void Microsoft_SourceGen_Utf8_DeserializeLargeDataset() =>
+        _ = JsonSerializer.Deserialize(serializedTestUsersUtf8, UserSerializerContext.Default.ListUser);
+
+    [BenchmarkCategory("Deserialize Individual Data"), Benchmark]
+    public void Microsoft_SourceGen_Utf8_DeserializeIndividualData()
+    {
+        foreach (var userUtf8 in serializedTestUsersUtf8List)
+        {
+            _ = JsonSerializer.Deserialize(userUtf8, UserSerializerContext.Default.User);
+        }
+    }
+    #endregion
+
 }
