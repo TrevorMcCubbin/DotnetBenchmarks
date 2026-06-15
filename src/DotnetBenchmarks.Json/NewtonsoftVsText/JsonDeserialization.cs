@@ -31,8 +31,7 @@ public class JsonDeserialization
     private string serializedTestUsers = string.Empty;
     private byte[] serializedTestUsersUtf8 = null!;
 
-    [Params(10000)]
-    public int Count { get; set; }
+    public int Count { get; set; } = 10000;
 
     [GlobalSetup]
     public void GlobalSetup()
