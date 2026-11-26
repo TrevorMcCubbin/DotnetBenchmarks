@@ -7,15 +7,14 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <LangVersion>7.3</LangVersion>
-        <Optimize>true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
-      <PackageReference Include="BenchmarkDotNet.Annotations" Version="0.15.8" />
-      <PackageReference Include="Bogus" Version="35.6.5" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-      <PackageReference Include="System.Text.Json" Version="10.0.15" />
+        <PackageReference Include="BenchmarkDotNet"/>
+        <PackageReference Include="BenchmarkDotNet.Annotations"/>
+        <PackageReference Include="Bogus"/>
+        <PackageReference Include="Newtonsoft.Json"/>
+        <PackageReference Include="System.Text.Json"/>
     </ItemGroup>
 
 </Project>
