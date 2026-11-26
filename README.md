@@ -8,6 +8,7 @@ Welcome to my .NET Benchmarks repository! This repository is dedicated to benchm
 
 - [Getting Started](#getting-started)
   - [Running Benchmarks](#running-benchmarks)
+- [Benchmark Environments](#benchmark-environments)
 - [Benchmarking Guidelines](#benchmarking-guidelines)
 - [Contributing](#contributing)
 - [License](#license)
@@ -23,25 +24,45 @@ git clone https://github.com/TrevorMcCubbin/DotnetBenchmarks.git
 cd DotnetBenchmarks
 ```
 
-Install .NET 8 SDK:
+Install .NET 10 SDK:
 Make sure you have the .NET Core SDK installed.
 
 ### Running Benchmarks
 
-To run Json Benchmarks in .Net 8:
+To run Json Benchmarks in .Net 10:
 
 ```bash
 dotnet run -c release --project .\src\DotnetBenchmarks.Json\DotnetBenchmarks.Json.csproj
 ```
 
-To run a comparison of various benchmarks between .Net 8 and .Net Framework 4.8:
+To run a comparison of various benchmarks between .Net Framework 4.8 and .Net 10:
 
 ```bash
-dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj --framework net8.0
+dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj --framework net10.0 -- --filter "*DotnetBenchmarks.FrameworkFaceOff.Json*"
+```
+
+To run a comparison of various benchmarks between .Net 8 and .Net 10:
+
+```bash
+dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj --framework net10.0 -- --filter "*Net8VsNet10*"
 ```
 
 Explore Results:
 After running the benchmarks, explore the generated reports and analyze the performance metrics.
+
+## Benchmark Environments
+
+Benchmark results in this repository were captured on the following machines:
+
+| .NET Version | Machine          | CPU                  | RAM                   |
+|--------------|------------------|----------------------|-----------------------|
+| .NET 8 & 9   | Dell XPS 15 7590 | Intel Core i7-9750H  | 16 GB DDR4 @ 2666 MHz |
+| .NET 10      | Dell XPS 15 9510 | Intel Core i7-11800H | 16 GB DDR4 @ 3200 MHz |
+
+The .NET 8 and .NET 9 results (including the .NET Framework 4.8 vs .NET 8 face-off) were run on the older machine, while
+all .NET 10 results (including the .NET Framework 4.8 vs .NET 10 and .NET 8 vs .NET 10 face-offs) were run on the newer
+machine. Keep this in mind when comparing results across .NET versions, as they are not directly comparable across
+machines.
 
 ## Benchmarking Guidelines
 

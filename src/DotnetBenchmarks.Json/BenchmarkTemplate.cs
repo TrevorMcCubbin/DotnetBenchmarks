@@ -6,12 +6,12 @@ namespace DotnetBenchmarks.Json;
 
 [RPlotExporter]
 [SimpleJob(
-    RuntimeMoniker.Net80,
+    RuntimeMoniker.Net10_0,
     launchCount: 1,
     warmupCount: 3,
     iterationCount: 5,
     invocationCount: -1,
-    id: "NET 8.0",
+    id: "NET 10.0",
     baseline: true
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
