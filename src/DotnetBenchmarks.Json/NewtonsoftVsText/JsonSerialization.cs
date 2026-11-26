@@ -27,7 +27,7 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 public class JsonSerialization
 {
     private readonly JsonSerializerOptions jsonSerializerOptions =
-        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+        new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
     private readonly JsonSerializerSettings jsonSerializerSettings =
         new()
@@ -41,8 +41,7 @@ public class JsonSerialization
 
     private List<User> testUsers =  [ ];
 
-    [Params(10000)]
-    public int Count { get; set; }
+    public int Count { get; set; } = 10000;
 
     [GlobalSetup]
     public void GlobalSetup()
@@ -62,26 +61,18 @@ public class JsonSerialization
         testUsers = faker.Generate(Count);
     }
 
-    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
-    public void NewtonsoftSerializeLargeDataset() => _ = JsonConvert.SerializeObject(testUsers);
+    #region Newtonsoft.Json
 
-    [BenchmarkCategory("Serialize Large Dataset"), Benchmark(Baseline = true)]
-    public void MicrosoftSerializeLargeDataset() => _ = JsonSerializer.Serialize(testUsers);
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
+    public void Newtonsoft_SerializeLargeDataset() =>
+        _ = JsonConvert.SerializeObject(testUsers);
 
     [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark]
-    public void NewtonsoftSerializeLargeDatasetWithSettings()
-    {
+    public void Newtonsoft_SerializeLargeDatasetWithSettings() =>
         _ = JsonConvert.SerializeObject(testUsers, jsonSerializerSettings);
-    }
-
-    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark(Baseline = true)]
-    public void MicrosoftSerializeLargeDatasetWithSettings()
-    {
-        _ = JsonSerializer.Serialize(testUsers, jsonSerializerOptions);
-    }
 
     [BenchmarkCategory("Serialize Individual Data"), Benchmark]
-    public void NewtonsoftSerializeIndividualData()
+    public void Newtonsoft_SerializeIndividualData()
     {
         foreach (var user in testUsers)
         {
@@ -89,12 +80,87 @@ public class JsonSerialization
         }
     }
 
+    #endregion
+    #region System.Text.Json (with Reflection)
+
+    // strings
+
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark(Baseline = true)]
+    public void Microsoft_SerializeLargeDataset() =>
+        _ = JsonSerializer.Serialize(testUsers);
+
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark(Baseline = true)]
+    public void Microsoft_SerializeLargeDatasetWithSettings() =>
+        _ = JsonSerializer.Serialize(testUsers, jsonSerializerOptions);
+
     [BenchmarkCategory("Serialize Individual Data"), Benchmark(Baseline = true)]
-    public void MicrosoftSerializeIndividualData()
+    public void Microsoft_SerializeIndividualData()
     {
         foreach (var user in testUsers)
         {
             _ = JsonSerializer.Serialize(user);
         }
     }
+
+    // UTF-8 bytes
+
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
+    public void Microsoft_Utf8_SerializeLargeDataset() =>
+        _ = JsonSerializer.SerializeToUtf8Bytes(testUsers);
+
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark]
+    public void Microsoft_Utf8_SerializeLargeDatasetWithSettings() =>
+        _ = JsonSerializer.SerializeToUtf8Bytes(testUsers, jsonSerializerOptions);
+
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark]
+    public void Microsoft_Utf8_SerializeIndividualData()
+    {
+        foreach (var user in testUsers)
+        {
+            _ = JsonSerializer.SerializeToUtf8Bytes(user);
+        }
+    }
+
+    #endregion
+    #region System.Text.Json (with Source Generation)
+
+    // strings
+
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
+    public void Microsoft_SourceGen_SerializeLargeDataset() =>
+        _ = JsonSerializer.Serialize(testUsers, UserSerializerContext.Default.ListUser);
+
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark]
+    public void Microsoft_SourceGen_SerializeLargeDatasetWithSettings() =>
+        _ = JsonSerializer.Serialize(testUsers, UserSerializerContextWithOptions.Default.ListUser);
+
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark]
+    public void Microsoft_SourceGen_SerializeIndividualData()
+    {
+        foreach (var user in testUsers)
+        {
+            _ = JsonSerializer.Serialize(user, UserSerializerContext.Default.User);
+        }
+    }
+
+    // UTF-8 bytes
+
+    [BenchmarkCategory("Serialize Large Dataset"), Benchmark]
+    public void Microsoft_SourceGen_Utf8_SerializeLargeDataset() =>
+        _ = JsonSerializer.SerializeToUtf8Bytes(testUsers, UserSerializerContext.Default.ListUser);
+
+    [BenchmarkCategory("Serialize Large Dataset With Settings"), Benchmark]
+    public void Microsoft_SourceGen_Utf8_SerializeLargeDatasetWithSettings() =>
+        _ = JsonSerializer.SerializeToUtf8Bytes(testUsers, UserSerializerContextWithOptions.Default.ListUser);
+
+    [BenchmarkCategory("Serialize Individual Data"), Benchmark]
+    public void Microsoft_SourceGen_Utf8_SerializeIndividualData()
+    {
+        foreach (var user in testUsers)
+        {
+            _ = JsonSerializer.SerializeToUtf8Bytes(user, UserSerializerContext.Default.User);
+        }
+    }
+
+    #endregion
 }
