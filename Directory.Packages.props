@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    </PropertyGroup>
-
-    <ItemGroup Label="Package versions">
-        <PackageVersion Include="BenchmarkDotNet" Version="0.15.8"/>
-        <PackageVersion Include="BenchmarkDotNet.Annotations" Version="0.15.8"/>
-        <PackageVersion Include="Bogus" Version="35.6.5"/>
-        <PackageVersion Include="Newtonsoft.Json" Version="13.0.4"/>
-        <PackageVersion Include="System.Text.Json" Version="10.0.15"/>
-    </ItemGroup>
-
+  <ItemGroup Label="Package versions">
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageVersion Include="BenchmarkDotNet.Annotations" Version="0.15.8" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.15" />
+  </ItemGroup>
 </Project>

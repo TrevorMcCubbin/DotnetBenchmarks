@@ -47,6 +47,21 @@ To run a comparison of various benchmarks between .Net 8 and .Net 10:
 dotnet run -c release --project .\src\DotnetBenchmarks.FrameworkFaceOff\DotnetBenchmarks.FrameworkFaceOff.csproj --framework net10.0 -- --filter "*Net8VsNet10*"
 ```
 
+### Formatting C# code
+
+Restore the local tools and run CSharpier from the repository root:
+
+```bash
+dotnet tool restore
+dotnet csharpier format .
+```
+
+To check formatting without changing files:
+
+```bash
+dotnet csharpier check .
+```
+
 Explore Results:
 After running the benchmarks, explore the generated reports and analyze the performance metrics.
 

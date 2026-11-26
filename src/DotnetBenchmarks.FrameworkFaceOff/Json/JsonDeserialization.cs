@@ -47,18 +47,15 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
         [GlobalSetup]
         public void GlobalSetup()
         {
-            var faker = new Faker<User>().CustomInstantiator(
-                f =>
-                    new User
-                    {
-                        UserId = Guid.NewGuid(),
-                        FirstName = f.Name.FirstName(),
-                        LastName = f.Name.LastName(),
-                        FullName = f.Name.FullName(),
-                        Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                        Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                    }
-            );
+            var faker = new Faker<User>().CustomInstantiator(f => new User
+            {
+                UserId = Guid.NewGuid(),
+                FirstName = f.Name.FirstName(),
+                LastName = f.Name.LastName(),
+                FullName = f.Name.FullName(),
+                Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+                Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName()),
+            });
 
             var testUsers = faker.Generate(Count);
 

@@ -37,7 +37,8 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Net8VsNet10
     [Orderer(SummaryOrderPolicy.SlowestToFastest, MethodOrderPolicy.Declared)]
     public class JsonDeserialization
     {
-        [Params(10000)] public int Count { get; set; }
+        [Params(10000)]
+        public int Count { get; set; }
 
         private string _serializedTestUsers = string.Empty;
 
@@ -46,17 +47,15 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Net8VsNet10
         [GlobalSetup]
         public void GlobalSetup()
         {
-            var faker = new Faker<User>().CustomInstantiator(f =>
-                new User
-                {
-                    UserId = Guid.NewGuid(),
-                    FirstName = f.Name.FirstName(),
-                    LastName = f.Name.LastName(),
-                    FullName = f.Name.FullName(),
-                    Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                    Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                }
-            );
+            var faker = new Faker<User>().CustomInstantiator(f => new User
+            {
+                UserId = Guid.NewGuid(),
+                FirstName = f.Name.FirstName(),
+                LastName = f.Name.LastName(),
+                FullName = f.Name.FullName(),
+                Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+                Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName()),
+            });
 
             var testUsers = faker.Generate(Count);
 

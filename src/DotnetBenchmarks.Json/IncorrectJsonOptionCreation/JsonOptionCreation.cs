@@ -7,6 +7,7 @@ using Bogus;
 using DotnetBenchmarks.Json.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DotnetBenchmarks.Json.IncorrectJsonOptionCreation;
 
@@ -24,20 +25,22 @@ namespace DotnetBenchmarks.Json.IncorrectJsonOptionCreation;
 [CategoriesColumn]
 public class JsonOptionCreation
 {
-    private readonly JsonSerializerSettings _newtonsoftSerializerSettings =
-        new()
+    private readonly JsonSerializerSettings _newtonsoftSerializerSettings = new()
+    {
+        Formatting = Formatting.Indented,
+        ContractResolver = new DefaultContractResolver
         {
-            Formatting = Formatting.Indented,
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-        };
+            NamingStrategy = new SnakeCaseNamingStrategy(),
+        },
+    };
 
-    private readonly JsonSerializerOptions _microsoftSerializerOptions =
-        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+    private readonly JsonSerializerOptions _microsoftSerializerOptions = new()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy(),
+    };
 
-    private List<User> _users =  [ ];
+    private List<User> _users = [];
 
     [Params(10000)]
     public int Count { get; set; }
@@ -45,17 +48,14 @@ public class JsonOptionCreation
     [GlobalSetup]
     public void GlobalSetup()
     {
-        var faker = new Faker<User>().CustomInstantiator(
-            f =>
-                new User(
-                    Guid.NewGuid(),
-                    f.Name.FirstName(),
-                    f.Name.LastName(),
-                    f.Name.FullName(),
-                    f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                    f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                )
-        );
+        var faker = new Faker<User>().CustomInstantiator(f => new User(
+            Guid.NewGuid(),
+            f.Name.FirstName(),
+            f.Name.LastName(),
+            f.Name.FullName(),
+            f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+            f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
+        ));
 
         _users = faker.Generate(Count);
     }
@@ -74,8 +74,8 @@ public class JsonOptionCreation
             Formatting = Formatting.Indented,
             ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
+                NamingStrategy = new SnakeCaseNamingStrategy(),
+            },
         };
 
         JsonConvert.SerializeObject(_users, settings);
@@ -84,7 +84,7 @@ public class JsonOptionCreation
     [BenchmarkCategory("Microsoft With Settings"), Benchmark(Baseline = true)]
     public void MicrosoftSerializeWithSettingsInitialization()
     {
-        System.Text.Json.JsonSerializer.Serialize(_users, _microsoftSerializerOptions);
+        JsonSerializer.Serialize(_users, _microsoftSerializerOptions);
     }
 
     [BenchmarkCategory("Microsoft With Settings"), Benchmark]
@@ -93,9 +93,9 @@ public class JsonOptionCreation
         var settings = new JsonSerializerOptions
         {
             WriteIndented = true,
-            PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy()
+            PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy(),
         };
 
-        System.Text.Json.JsonSerializer.Serialize(_users, settings);
+        JsonSerializer.Serialize(_users, settings);
     }
 }

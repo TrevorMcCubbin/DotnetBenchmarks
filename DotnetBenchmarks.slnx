@@ -1,11 +1,11 @@
 <Solution>
-    <Folder Name="/Solution Items/">
-        <File Path=".gitattributes"/>
-        <File Path=".gitignore"/>
-        <File Path="README.md"/>
-    </Folder>
-    <Folder Name="/src/">
-        <Project Path="src/DotnetBenchmarks.FrameworkFaceOff/DotnetBenchmarks.FrameworkFaceOff.csproj"/>
-        <Project Path="src/DotnetBenchmarks.Json/DotnetBenchmarks.Json.csproj"/>
-    </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/DotnetBenchmarks.FrameworkFaceOff/DotnetBenchmarks.FrameworkFaceOff.csproj" />
+    <Project Path="src/DotnetBenchmarks.Json/DotnetBenchmarks.Json.csproj" />
+  </Folder>
 </Solution>

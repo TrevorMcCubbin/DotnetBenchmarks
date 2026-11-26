@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+  <!-- Repository metadata shared by every project. -->
+  <PropertyGroup>
+    <Authors>TrevorMcCubbin</Authors>
+    <RepositoryUrl>https://github.com/TrevorMcCubbin/DotnetBenchmarks</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    <PackageTags>benchmarks;benchmarkdotnet</PackageTags>
+  </PropertyGroup>
 
-    <!-- Repository metadata shared by every project. -->
-    <PropertyGroup>
-        <Authors>TrevorMcCubbin</Authors>
-        <RepositoryUrl>https://github.com/TrevorMcCubbin/DotnetBenchmarks</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
-        <PackageTags>benchmarks;benchmarkdotnet</PackageTags>
-    </PropertyGroup>
-
-    <!-- Build policy shared by every project. -->
-    <PropertyGroup>
-        <Optimize>true</Optimize>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    </PropertyGroup>
-
+  <!-- Build policy shared by every project. -->
+  <PropertyGroup>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 </Project>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
@@ -8,6 +7,8 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Order;
 using Bogus;
 using DotnetBenchmarks.FrameworkFaceOff.Model;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DotnetBenchmarks.FrameworkFaceOff.Json
 {
@@ -43,18 +44,15 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
         [GlobalSetup]
         public void GlobalSetup()
         {
-            var faker = new Faker<User>().CustomInstantiator(
-                f =>
-                    new User
-                    {
-                        UserId = Guid.NewGuid(),
-                        FirstName = f.Name.FirstName(),
-                        LastName = f.Name.LastName(),
-                        FullName = f.Name.FullName(),
-                        Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                        Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                    }
-            );
+            var faker = new Faker<User>().CustomInstantiator(f => new User
+            {
+                UserId = Guid.NewGuid(),
+                FirstName = f.Name.FirstName(),
+                LastName = f.Name.LastName(),
+                FullName = f.Name.FullName(),
+                Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+                Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName()),
+            });
 
             _testUsers = faker.Generate(Count);
         }
@@ -63,8 +61,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             BenchmarkCategory("Serialize Big Data"),
             Benchmark(Description = "Newtonsoft", Baseline = true)
         ]
-        public void NewtonsoftSerializeBigData() =>
-            _ = Newtonsoft.Json.JsonConvert.SerializeObject(_testUsers);
+        public void NewtonsoftSerializeBigData() => _ = JsonConvert.SerializeObject(_testUsers);
 
         [BenchmarkCategory("Serialize Big Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftSerializeBigData() => _ = JsonSerializer.Serialize(_testUsers);
@@ -77,7 +74,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
         {
             foreach (var user in _testUsers)
             {
-                _ = Newtonsoft.Json.JsonConvert.SerializeObject(user);
+                _ = JsonConvert.SerializeObject(user);
             }
         }
 
