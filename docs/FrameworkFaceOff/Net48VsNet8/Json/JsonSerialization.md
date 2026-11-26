@@ -1,5 +1,5 @@
 | Method     | Runtime            | Categories                | Count |      Mean | Ratio | Allocated | Alloc Ratio |
-| ---------- | ------------------ | ------------------------- | ----- | --------: | ----: | --------: | ----------: |
+|------------|--------------------|---------------------------|-------|----------:|------:|----------:|------------:|
 | Newtonsoft | .NET Framework 4.8 | Serialize Big Data        | 10000 | 17.736 ms |  1.00 |   8.16 MB |        1.00 |
 | Microsoft  | .NET Framework 4.8 | Serialize Big Data        | 10000 | 17.481 ms |  0.99 |   5.42 MB |        0.66 |
 | Newtonsoft | .NET 8.0           | Serialize Big Data        | 10000 |  9.821 ms |  0.55 |   8.07 MB |        0.99 |

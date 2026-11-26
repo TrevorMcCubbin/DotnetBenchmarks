@@ -11,12 +11,12 @@ using Newtonsoft.Json.Serialization;
 namespace DotnetBenchmarks.Json.IncorrectJsonOptionCreation;
 
 [SimpleJob(
-    RuntimeMoniker.Net80,
+    RuntimeMoniker.Net10_0,
     launchCount: 1,
     warmupCount: 3,
     iterationCount: 5,
     invocationCount: -1,
-    id: "NET 8.0"
+    id: "NET 10.0"
 )]
 [MemoryDiagnoser(displayGenColumns: false)]
 [HideColumns(Column.Job, Column.StdDev, Column.Error, Column.RatioSD)]
