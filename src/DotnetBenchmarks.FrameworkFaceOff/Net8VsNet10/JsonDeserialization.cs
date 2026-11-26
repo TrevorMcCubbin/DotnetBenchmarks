@@ -37,7 +37,8 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Net8VsNet10
     [Orderer(SummaryOrderPolicy.SlowestToFastest, MethodOrderPolicy.Declared)]
     public class JsonDeserialization
     {
-        [Params(10000)] public int Count { get; set; }
+        [Params(10000)]
+        public int Count { get; set; }
 
         private string _serializedTestUsers = string.Empty;
 

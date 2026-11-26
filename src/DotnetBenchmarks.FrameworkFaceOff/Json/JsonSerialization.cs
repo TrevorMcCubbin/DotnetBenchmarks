@@ -36,7 +36,8 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
     [Orderer(SummaryOrderPolicy.SlowestToFastest, MethodOrderPolicy.Declared)]
     public class JsonSerialization
     {
-        [Params(10000)] public int Count { get; set; }
+        [Params(10000)]
+        public int Count { get; set; }
 
         private List<User> _testUsers = new List<User>();
 
@@ -60,8 +61,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Json
             BenchmarkCategory("Serialize Big Data"),
             Benchmark(Description = "Newtonsoft", Baseline = true)
         ]
-        public void NewtonsoftSerializeBigData() =>
-            _ = JsonConvert.SerializeObject(_testUsers);
+        public void NewtonsoftSerializeBigData() => _ = JsonConvert.SerializeObject(_testUsers);
 
         [BenchmarkCategory("Serialize Big Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftSerializeBigData() => _ = JsonSerializer.Serialize(_testUsers);

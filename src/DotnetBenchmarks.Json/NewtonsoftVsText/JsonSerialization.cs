@@ -43,7 +43,8 @@ public class JsonSerialization
 
     private List<User> testUsers = [];
 
-    [Params(10000)] public int Count { get; set; }
+    [Params(10000)]
+    public int Count { get; set; }
 
     [GlobalSetup]
     public void GlobalSetup()

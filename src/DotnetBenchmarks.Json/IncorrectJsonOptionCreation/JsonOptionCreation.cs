@@ -42,7 +42,8 @@ public class JsonOptionCreation
 
     private List<User> _users = [];
 
-    [Params(10000)] public int Count { get; set; }
+    [Params(10000)]
+    public int Count { get; set; }
 
     [GlobalSetup]
     public void GlobalSetup()

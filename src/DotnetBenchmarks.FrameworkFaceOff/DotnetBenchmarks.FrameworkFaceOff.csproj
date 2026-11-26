@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet"/>
-    <PackageReference Include="BenchmarkDotNet.Annotations"/>
-    <PackageReference Include="Bogus"/>
-    <PackageReference Include="Newtonsoft.Json"/>
-    <PackageReference Include="System.Text.Json"/>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="BenchmarkDotNet.Annotations" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 </Project>

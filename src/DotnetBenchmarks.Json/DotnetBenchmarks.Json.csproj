@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet"/>
-    <PackageReference Include="Bogus"/>
-    <PackageReference Include="Newtonsoft.Json"/>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 </Project>
