@@ -1,20 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DotnetBenchmarks.FrameworkFaceOff</RootNamespace>
+    <TargetFrameworks>net10.0;net8.0;net48</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <RootNamespace>DotnetBenchmarks.FrameworkFaceOff</RootNamespace>
-        <TargetFrameworks>net10.0;net8.0;net48</TargetFrameworks>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>disable</Nullable>
-        <LangVersion>7.3</LangVersion>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet"/>
-        <PackageReference Include="BenchmarkDotNet.Annotations"/>
-        <PackageReference Include="Bogus"/>
-        <PackageReference Include="Newtonsoft.Json"/>
-        <PackageReference Include="System.Text.Json"/>
-    </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet"/>
+    <PackageReference Include="BenchmarkDotNet.Annotations"/>
+    <PackageReference Include="Bogus"/>
+    <PackageReference Include="Newtonsoft.Json"/>
+    <PackageReference Include="System.Text.Json"/>
+  </ItemGroup>
 </Project>

@@ -26,38 +26,36 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 [CategoriesColumn]
 public class JsonSerialization
 {
-    private readonly JsonSerializerOptions jsonSerializerOptions =
-        new() { WriteIndented = true, PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy() };
+    private readonly JsonSerializerOptions jsonSerializerOptions = new()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = new SnakeCasePropertyNamingPolicy(),
+    };
 
-    private readonly JsonSerializerSettings jsonSerializerSettings =
-        new()
+    private readonly JsonSerializerSettings jsonSerializerSettings = new()
+    {
+        Formatting = Formatting.Indented,
+        ContractResolver = new DefaultContractResolver
         {
-            Formatting = Formatting.Indented,
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-        };
+            NamingStrategy = new SnakeCaseNamingStrategy(),
+        },
+    };
 
-    private List<User> testUsers =  [ ];
+    private List<User> testUsers = [];
 
-    [Params(10000)]
-    public int Count { get; set; }
+    [Params(10000)] public int Count { get; set; }
 
     [GlobalSetup]
     public void GlobalSetup()
     {
-        var faker = new Faker<User>().CustomInstantiator(
-            f =>
-                new User(
-                    Guid.NewGuid(),
-                    f.Name.FirstName(),
-                    f.Name.LastName(),
-                    f.Name.FullName(),
-                    f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                    f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                )
-        );
+        var faker = new Faker<User>().CustomInstantiator(f => new User(
+            Guid.NewGuid(),
+            f.Name.FirstName(),
+            f.Name.LastName(),
+            f.Name.FullName(),
+            f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+            f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
+        ));
 
         testUsers = faker.Generate(Count);
     }

@@ -43,17 +43,15 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Net8VsNet10
         [GlobalSetup]
         public void GlobalSetup()
         {
-            var faker = new Faker<User>().CustomInstantiator(f =>
-                new User
-                {
-                    UserId = Guid.NewGuid(),
-                    FirstName = f.Name.FirstName(),
-                    LastName = f.Name.LastName(),
-                    FullName = f.Name.FullName(),
-                    Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                    Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                }
-            );
+            var faker = new Faker<User>().CustomInstantiator(f => new User
+            {
+                UserId = Guid.NewGuid(),
+                FirstName = f.Name.FirstName(),
+                LastName = f.Name.LastName(),
+                FullName = f.Name.FullName(),
+                Username = f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+                Email = f.Internet.Email(f.Name.FirstName(), f.Name.LastName()),
+            });
 
             _testUsers = faker.Generate(Count);
         }
@@ -62,8 +60,7 @@ namespace DotnetBenchmarks.FrameworkFaceOff.Net8VsNet10
             BenchmarkCategory("Serialize Big Data"),
             Benchmark(Description = "Newtonsoft", Baseline = true)
         ]
-        public void NewtonsoftSerializeBigData() =>
-            _ = JsonConvert.SerializeObject(_testUsers);
+        public void NewtonsoftSerializeBigData() => _ = JsonConvert.SerializeObject(_testUsers);
 
         [BenchmarkCategory("Serialize Big Data"), Benchmark(Description = "Microsoft")]
         public void MicrosoftSerializeBigData() => _ = JsonSerializer.Serialize(_testUsers);

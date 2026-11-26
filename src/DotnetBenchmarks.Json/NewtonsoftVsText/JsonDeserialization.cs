@@ -24,27 +24,23 @@ namespace DotnetBenchmarks.Json.NewtonsoftVsText;
 [CategoriesColumn]
 public class JsonDeserialization
 {
-    private readonly List<string> serializedTestUsersList =  [ ];
+    private readonly List<string> serializedTestUsersList = [];
 
     private string serializedTestUsers = string.Empty;
 
-    [Params(10000)]
-    public int Count { get; set; }
+    [Params(10000)] public int Count { get; set; }
 
     [GlobalSetup]
     public void GlobalSetup()
     {
-        var faker = new Faker<User>().CustomInstantiator(
-            f =>
-                new User(
-                    Guid.NewGuid(),
-                    f.Name.FirstName(),
-                    f.Name.LastName(),
-                    f.Name.FullName(),
-                    f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
-                    f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
-                )
-        );
+        var faker = new Faker<User>().CustomInstantiator(f => new User(
+            Guid.NewGuid(),
+            f.Name.FirstName(),
+            f.Name.LastName(),
+            f.Name.FullName(),
+            f.Internet.UserName(f.Name.FirstName(), f.Name.LastName()),
+            f.Internet.Email(f.Name.FirstName(), f.Name.LastName())
+        ));
 
         var testUsers = faker.Generate(Count);
 
